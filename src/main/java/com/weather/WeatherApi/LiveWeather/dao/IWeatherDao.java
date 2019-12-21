@@ -1,4 +1,4 @@
-package com.weather.WeatherApi.dao;
+package com.weather.WeatherApi.LiveWeather.dao;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;

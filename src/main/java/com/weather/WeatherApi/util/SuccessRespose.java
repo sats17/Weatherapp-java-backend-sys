@@ -3,7 +3,7 @@ package com.weather.WeatherApi.util;
 public class SuccessRespose {
 	
 	private String city;
-	private int humidity;
+	private Double humidity;
 	/**
 	 * @return the city
 	 */
@@ -19,16 +19,16 @@ public class SuccessRespose {
 	/**
 	 * @return the humidity
 	 */
-	public int getHumidity() {
+	public Double getHumidity() {
 		return humidity;
 	}
 	/**
 	 * @param humidity the humidity to set
 	 */
-	public void setHumidity(int humidity) {
+	public void setHumidity(Double humidity) {
 		this.humidity = humidity;
 	}
-	public SuccessRespose(String city, int humidity) {
+	public SuccessRespose(String city, Double humidity) {
 		super();
 		this.city = city;
 		this.humidity = humidity;

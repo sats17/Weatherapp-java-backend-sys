@@ -1,4 +1,4 @@
-package com.weather.WeatherApi.dao;
+package com.weather.WeatherApi.LiveWeather.dao;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -19,6 +19,9 @@ public class WeatherDaoImpl implements IWeatherDao{
 	
 	@Override
 	public HttpResponse<JsonNode> getWeather(String city) {
+		
+		
+		//Unirest.config().verifySsl(false);
 		HttpResponse<JsonNode> response = Unirest.get(apiPath)
                 .queryString("APPID",apiId)
                 .queryString("q",city)
