@@ -25,6 +25,10 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 
 
+/**
+ * @author sats17
+ *
+ */
 @Service("WeatherService")
 public class WeatherServiceImpl implements IWeatherService{
 
@@ -47,7 +51,8 @@ public class WeatherServiceImpl implements IWeatherService{
 		if(httpResponse.getStatus() == 200) {
 			JsonNode body = httpResponse.getBody();
 			Double humidity = ((double)(int) body.getObject().getJSONObject("main").get("humidity"));
-			SuccessRespose response = new SuccessRespose(city, humidity,null);
+			Date time=new Date(body.getObject().getLong("dt")*1000);
+			SuccessRespose response = new SuccessRespose(city, humidity,time);
 			return response;
 		}
 		else if(httpResponse.getStatus() == 404){
@@ -95,12 +100,19 @@ public class WeatherServiceImpl implements IWeatherService{
 
 	@Override
 	public List<WeatherData> getWeatherByCity(String city) {
-		return weatherDataDao.getWeatherByCity(city);
+		List<WeatherData> data = weatherDataDao.getWeatherByCity(city);
+		if(data.size() == 0) {
+			throw new CityNotFoundException("Cannot fetch weather for given city.");
+		}
+		return data;
 	}
 
 	@Override
 	public SuccessRespose getHumidity(String city, Date date) {
 		Double humidity = weatherDataDao.getHumidityByCityAndDate(city, date);
+		if(humidity == null) {
+			throw new DefaultException("Humidity not available for given date or city.");
+		}
 		SuccessRespose response = new SuccessRespose(city,humidity,date);
 		return response;
 	}
@@ -109,6 +121,9 @@ public class WeatherServiceImpl implements IWeatherService{
 	public List<SuccessRespose> getHumidityByCity(String city) {
 		// TODO Auto-generated method stub
 		List<Object[]> datas =  weatherDataDao.getHumidityByCity(city);
+		if(datas.size() == 0) {
+			throw new CityNotFoundException("Cannot fetch humidity for given city.");
+		}
 		List<SuccessRespose> response = new ArrayList<SuccessRespose>();
 		for(Object[] data: datas){
 	         SuccessRespose obj = new SuccessRespose(city, (Double) data[1],(Date)data[0]);

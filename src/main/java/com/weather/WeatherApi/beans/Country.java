@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+/**
+ * @author sats17
+ *
+ */
 @Entity
 @Table(name = "country")
 public class Country {
@@ -48,12 +52,19 @@ public class Country {
 		this.country = country;
 	}
 
+	/**
+	 * @param countryid
+	 * @param country
+	 */
 	public Country(int countryid, String country) {
 		super();
 		this.countryid = countryid;
 		this.country = country;
 	}
 	
+	/**
+	 * 
+	 */
 	public Country() {}
 
 	@Override

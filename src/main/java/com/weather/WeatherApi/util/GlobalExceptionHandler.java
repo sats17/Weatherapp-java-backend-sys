@@ -9,12 +9,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
+import com.weather.WeatherApi.exceptions.DefaultException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(CityNotFoundException.class)
 	public static final ResponseEntity<ExceptionResponse> handleGlobalException(CityNotFoundException ex, WebRequest req) {
+
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+
+				req.getDescription(false), HttpStatus.NOT_ACCEPTABLE.getReasonPhrase());
+
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_ACCEPTABLE);
+
+	}
+	
+	@ExceptionHandler(DefaultException.class)
+	public static final ResponseEntity<ExceptionResponse> handleDefaultException(DefaultException ex, WebRequest req) {
 
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
 

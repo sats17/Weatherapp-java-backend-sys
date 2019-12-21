@@ -18,6 +18,10 @@ import javax.persistence.UniqueConstraint;
 
 import com.weather.WeatherApi.util.WeatherCalculation;
 
+/**
+ * @author sats17
+ *
+ */
 @Entity
 @Table(name = "weatherdata",uniqueConstraints=@UniqueConstraint(columnNames={"cityid", "date"}))
 public class WeatherData {
@@ -127,6 +131,14 @@ public class WeatherData {
 		this.city = city;
 	}
 
+	/**
+	 * @param id
+	 * @param temperature
+	 * @param dew
+	 * @param humidity
+	 * @param date
+	 * @param city
+	 */
 	public WeatherData(int id, double temperature, double dew, double humidity, Date date, City city) {
 		super();
 		this.id = id;
@@ -138,6 +150,9 @@ public class WeatherData {
 	}
 
 	
+	/**
+	 * Default constructor
+	 */
 	public WeatherData() {}
 	
 	

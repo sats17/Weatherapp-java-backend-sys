@@ -8,6 +8,10 @@ import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
 
+/**
+ * @author sats17
+ *
+ */
 @Repository
 public class WeatherDaoImpl implements IWeatherDao{
 	

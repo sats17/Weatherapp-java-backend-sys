@@ -27,6 +27,10 @@ import com.weather.WeatherApi.util.SuccessRespose;
 
 
 
+/**
+ * @author sats17
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
@@ -35,6 +39,11 @@ public class RestApiController {
 	private IWeatherService weatherService;
 	
 	
+	/**
+	 * @param city
+	 * @return ResponseEntity<SuccessResponse>
+	 * @apiNote Use to get live humidity for given city.
+	 */
 	@GetMapping(value = "/getLiveHumidity")
 	public ResponseEntity<SuccessRespose> getLiveHumidityByCity(@RequestParam ("city") String city) {
 		SuccessRespose response = weatherService.getLiveHumidity(city);
@@ -42,35 +51,66 @@ public class RestApiController {
 		
 	}
 	
+	/**
+	 * @param country
+	 * @return Country
+	 * @apiNote Use to set country.
+	 */
 	@PostMapping(value = "/setCountry")
 	public Country setCountry(@RequestBody final Country country) {
 		return weatherService.setCountry(country);
 	}
 	
+	/**
+	 * @param city
+	 * @return City
+	 * @apiNote Use to set city.
+	 */
 	@PostMapping(value = "/setCity")
 	public City setCountry(@RequestBody final City city) {
 		return weatherService.setCity(city);
 	}
 	
 	
+	/**
+	 * @param weather
+	 * @return WeatherData
+	 * @apiNote Use to set weather data.
+	 */
 	@PostMapping(value = "/setWeather")
 	public WeatherData setWeather(@RequestBody final WeatherData weather) {
 		return weatherService.setWeatherData(weather);
 	}
 	
+	/**
+	 * @param city
+	 * @return List<WeatherData>
+	 * @apiNote Use to get all days weather data for given city.
+	 */
 	@GetMapping(value = "/getWeather")
 	public List<WeatherData> getWeather(@RequestParam("city") String city){
 		return weatherService.getWeatherByCity(city);
 	}
 	
+	/**
+	 * @param city
+	 * @return List<SuccessRespose>
+	 * @apiNote Use to get all days humidity for given city.
+	 */
 	@GetMapping(value = "/getHumidity")
 	public List<SuccessRespose> getHumidityByCity(@RequestParam("city") String city){
 		return weatherService.getHumidityByCity(city);
 		
 	}
 	
-	@GetMapping(value = "/getHumidityByDate")
-	public ResponseEntity<SuccessRespose> getLiveHumidityByCityAndDate(@RequestParam ("city") String city,
+	/**
+	 * @param city
+	 * @param date
+	 * @return ResponseEntity<SuccessRespose>
+	 * @apiNote Use to get humidity by date and city
+	 */
+	@GetMapping(value = "/getHumidityByDateAndCity")
+	public ResponseEntity<SuccessRespose> getHumidityByCityAndDate(@RequestParam ("city") String city,
 			@RequestParam("date") String date) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date parsedDate = null;

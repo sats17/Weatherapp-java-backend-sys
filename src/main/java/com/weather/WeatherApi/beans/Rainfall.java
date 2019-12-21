@@ -9,6 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * @author sats17
+ *
+ */
 @Entity
 @Table(name = "rainfall",uniqueConstraints=@UniqueConstraint(columnNames={"month","year", "cityid"}))
 public class Rainfall {

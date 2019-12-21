@@ -13,6 +13,10 @@ import javax.persistence.UniqueConstraint;
 
 
 
+/**
+ * @author sats17
+ *
+ */
 @Entity
 @Table(name = "city",uniqueConstraints=@UniqueConstraint(columnNames={"latitude", "longitude"}))
 public class City {
@@ -120,6 +124,13 @@ public class City {
 	}
 
 
+	/**
+	 * @param cityId
+	 * @param city
+	 * @param country
+	 * @param latitude
+	 * @param longitude
+	 */
 	public City(int cityId, String city, Country country, double latitude, double longitude) {
 		super();
 		this.cityId = cityId;
@@ -129,6 +140,9 @@ public class City {
 		this.longitude = longitude;
 	}
 	
+	/**
+	 * 
+	 */
 	public City() {}
 
 
