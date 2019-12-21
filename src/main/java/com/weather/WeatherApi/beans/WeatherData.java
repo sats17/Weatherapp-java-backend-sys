@@ -1,7 +1,6 @@
 package com.weather.WeatherApi.beans;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.sql.Date;
 
 import javax.persistence.CascadeType;
@@ -15,8 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 import com.weather.WeatherApi.util.WeatherCalculation;
 

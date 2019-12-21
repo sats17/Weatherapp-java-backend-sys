@@ -1,9 +1,5 @@
 package com.weather.WeatherApi.beans;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name = "city",uniqueConstraints=@UniqueConstraint(columnNames={"latitude", "longtitude"}))
+@Table(name = "city",uniqueConstraints=@UniqueConstraint(columnNames={"latitude", "longitude"}))
 public class City {
 
 	@Id
@@ -38,8 +34,8 @@ public class City {
 	private double latitude;
 	
 
-	@Column(name = "longtitude" , length = 20)
-	private double longtitude;
+	@Column(name = "longitude" , length = 20)
+	private double longitude;
 
 
 	/**
@@ -91,18 +87,18 @@ public class City {
 
 
 	/**
-	 * @return the longtitude
+	 * @return the longitude
 	 */
-	public double getLongtitude() {
-		return longtitude;
+	public double getLongitude() {
+		return longitude;
 	}
 
 
 	/**
-	 * @param longtitude the longtitude to set
+	 * @param longtitude the longitude to set
 	 */
-	public void setLongtitude(double longtitude) {
-		this.longtitude = longtitude;
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 	
 	
@@ -124,13 +120,13 @@ public class City {
 	}
 
 
-	public City(int cityId, String city, Country country, double latitude, double longtitude) {
+	public City(int cityId, String city, Country country, double latitude, double longitude) {
 		super();
 		this.cityId = cityId;
 		this.city = city;
 		this.country = country;
 		this.latitude = latitude;
-		this.longtitude = longtitude;
+		this.longitude = longitude;
 	}
 	
 	public City() {}
@@ -139,7 +135,7 @@ public class City {
 	@Override
 	public String toString() {
 		return "City [cityId=" + cityId + ", city=" + city + ", country=" + country + ", latitude=" + latitude
-				+ ", longtitude=" + longtitude + "]";
+				+ ", longitude=" + longitude + "]";
 	}
 
 	

@@ -1,6 +1,7 @@
 package com.weather.WeatherApi.service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,8 @@ public class WeatherServiceImpl implements IWeatherService{
 		
 		if(httpResponse.getStatus() == 200) {
 			JsonNode body = httpResponse.getBody();
-			Double humidity = (Double) body.getObject().getJSONObject("main").get("humidity");
-			SuccessRespose response = new SuccessRespose(city, humidity);
+			Double humidity = ((double)(int) body.getObject().getJSONObject("main").get("humidity"));
+			SuccessRespose response = new SuccessRespose(city, humidity,null);
 			return response;
 		}
 		else if(httpResponse.getStatus() == 404){
@@ -64,8 +65,22 @@ public class WeatherServiceImpl implements IWeatherService{
 
 	@Override
 	public City setCity(City city) {
-		Country tempCon = countryDao.getCountryByName(city.getCountry().getCountry());
-		city.setCountry(tempCon);
+		Country tempCountry = countryDao.getCountryByName(city.getCountry().getCountry());
+		city.setCountry(tempCountry);
+		
+		HttpResponse<JsonNode> httpResponse = weatherDao.getWeather(city.getCity());
+		
+		if(httpResponse.getStatus() == 200) {
+			JsonNode body = httpResponse.getBody();
+			Double latitude = ((double) body.getObject().getJSONObject("coord").get("lat"));
+			Double longitude = ((double) body.getObject().getJSONObject("coord").get("lon"));
+			city.setLatitude(latitude);
+			city.setLongitude(longitude);
+		}
+		else {
+			city.setLatitude(Math.random());
+			city.setLongitude(Math.random());
+		}
 		
 		return cityDao.save(city);
 	}
@@ -86,24 +101,20 @@ public class WeatherServiceImpl implements IWeatherService{
 	@Override
 	public SuccessRespose getHumidity(String city, Date date) {
 		Double humidity = weatherDataDao.getHumidityByCityAndDate(city, date);
-		SuccessRespose response = new SuccessRespose(city,humidity);
+		SuccessRespose response = new SuccessRespose(city,humidity,date);
 		return response;
 	}
 
 	@Override
-	public Map<Date, Double> getHumidityByCity(String city) {
+	public List<SuccessRespose> getHumidityByCity(String city) {
 		// TODO Auto-generated method stub
 		List<Object[]> datas =  weatherDataDao.getHumidityByCity(city);
-		HashMap<Date, Double> map = new HashMap<Date, Double>();
+		List<SuccessRespose> response = new ArrayList<SuccessRespose>();
 		for(Object[] data: datas){
-	         map.put((Date)data[0],(Double) data[1]);
+	         SuccessRespose obj = new SuccessRespose(city, (Double) data[1],(Date)data[0]);
+	         response.add(obj);
 	     }
-		return map;
+		return response;
 	}
-
-	
-
-	
-	
 
 }

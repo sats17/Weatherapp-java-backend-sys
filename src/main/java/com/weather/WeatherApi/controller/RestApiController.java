@@ -7,13 +7,11 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.weather.WeatherApi.beans.City;
 import com.weather.WeatherApi.beans.Country;
 import com.weather.WeatherApi.beans.WeatherData;
-import com.weather.WeatherApi.exceptions.CityNotFoundException;
+import com.weather.WeatherApi.exceptions.DefaultException;
 import com.weather.WeatherApi.service.IWeatherService;
 import com.weather.WeatherApi.util.SuccessRespose;
 
-import kong.unirest.HttpResponse;
-import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
+
 
 @RestController
 @RequestMapping("/api")
@@ -68,7 +64,7 @@ public class RestApiController {
 	}
 	
 	@GetMapping(value = "/getHumidity")
-	public Map<Date, Double> getHumidityByCity(@RequestParam("city") String city){
+	public List<SuccessRespose> getHumidityByCity(@RequestParam("city") String city){
 		return weatherService.getHumidityByCity(city);
 		
 	}
@@ -76,24 +72,21 @@ public class RestApiController {
 	@GetMapping(value = "/getHumidityByDate")
 	public ResponseEntity<SuccessRespose> getLiveHumidityByCityAndDate(@RequestParam ("city") String city,
 			@RequestParam("date") String date) {
-		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    java.util.Date parsedDate = null;
-		    Date sqlDate = null;
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date parsedDate = null;
+			Date sqlDate = null;
 			try {
 				parsedDate = dateFormat.parse(date);
 			    sqlDate = new Date(parsedDate.getTime());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println(e);
+				throw new DefaultException("Please enter proper date format");
 			}
 		
-		SuccessRespose response = weatherService.getHumidity(city,sqlDate);
-		return new ResponseEntity<SuccessRespose>(response, HttpStatus.OK);
+			SuccessRespose response = weatherService.getHumidity(city,sqlDate);
+			return new ResponseEntity<SuccessRespose>(response, HttpStatus.OK);
 		
 	}
-	
-	
+
 	
 }	
 	

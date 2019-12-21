@@ -26,7 +26,7 @@ public interface IWeatherService {
 	
 	List<WeatherData> getWeatherByCity(String city);
 	
-	Map<Date, Double> getHumidityByCity(String city);
+	List<SuccessRespose> getHumidityByCity(String city);
 	
 	SuccessRespose getHumidity(String city,Date date);
 	
