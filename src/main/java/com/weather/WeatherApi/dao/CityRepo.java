@@ -1,7 +1,9 @@
 package com.weather.WeatherApi.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.weather.WeatherApi.beans.City;
 
@@ -18,4 +20,8 @@ public interface CityRepo extends JpaRepository<City, Integer>{
 	@Query(value = "SELECT c FROM City c WHERE city = :city")
 	City getCityByName(String city);
 	
+	@Transactional
+	@Modifying
+	@Query(value = "DELETE FROM City c where c.city = :city")
+	void deleteCity(String city);
 }

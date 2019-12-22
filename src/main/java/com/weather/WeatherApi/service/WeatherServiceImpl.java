@@ -132,4 +132,31 @@ public class WeatherServiceImpl implements IWeatherService{
 		return response;
 	}
 
+	@Override
+	public String deleteCity(String city) {
+		City cityObj = cityDao.getCityByName(city);
+		if(cityObj == null) {
+			throw new CityNotFoundException("Given city is not found");
+		}
+		try {
+			cityDao.deleteCity(cityObj.getCity());
+		}
+		catch(Exception e) {
+			throw new DefaultException("Internal server error.");
+		}
+		return "City Deleted";
+	}
+
+	@Override
+	public String deleteWeather(String city, Date date) {
+		try {
+			WeatherData weatherObj = weatherDataDao.getWeather(city, date);
+			weatherDataDao.delete(weatherObj);
+		}
+		catch(Exception e) {
+			throw new DefaultException("Internal server error");
+		}
+		return "Weather deleted";
+	}
+
 }

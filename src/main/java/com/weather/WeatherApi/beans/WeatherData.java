@@ -14,7 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.weather.WeatherApi.util.WeatherCalculation;
 
@@ -43,7 +44,8 @@ public class WeatherData {
 	@Column(name = "date")
 	private Date date;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name="cityid", nullable = false)
 	private City city;
 

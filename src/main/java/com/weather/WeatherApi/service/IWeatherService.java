@@ -1,10 +1,8 @@
 package com.weather.WeatherApi.service;
 
-import java.util.ArrayList;
+
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.weather.WeatherApi.beans.City;
 import com.weather.WeatherApi.beans.Country;
@@ -12,7 +10,6 @@ import com.weather.WeatherApi.beans.WeatherData;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
 import com.weather.WeatherApi.util.SuccessRespose;
 
-import kong.unirest.JsonNode;
 
 public interface IWeatherService {
 	
@@ -30,6 +27,9 @@ public interface IWeatherService {
 	
 	SuccessRespose getHumidity(String city,Date date);
 	
+	String deleteCity(String city);
+	
+	String deleteWeather(String city, Date date);
 	
 	
 }

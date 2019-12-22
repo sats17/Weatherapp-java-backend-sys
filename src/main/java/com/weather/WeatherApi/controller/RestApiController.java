@@ -6,11 +6,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -123,8 +123,32 @@ public class RestApiController {
 			}
 		
 			SuccessRespose response = weatherService.getHumidity(city,sqlDate);
+			System.out.println(response);
 			return new ResponseEntity<SuccessRespose>(response, HttpStatus.OK);
 		
+	}
+	
+	/**
+	 * @param city
+	 * @return String
+	 */
+	@DeleteMapping(value = "/deleteCity")
+	public String deleteCity(@RequestParam("city") String city) {
+		return weatherService.deleteCity(city);	
+	}
+	
+	@DeleteMapping(value = "/deleteWeather")
+	public String deleteWeather(@RequestParam("city") String city,@RequestParam("date") String date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date parsedDate = null;
+		Date sqlDate = null;
+		try {
+			parsedDate = dateFormat.parse(date);
+		    sqlDate = new Date(parsedDate.getTime());
+		} catch (ParseException e) {
+			throw new DefaultException("Please enter proper date format");
+		}
+		return weatherService.deleteWeather(city, sqlDate);	
 	}
 
 	
