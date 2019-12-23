@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.weather.WeatherApi.LiveWeather.dao.IWeatherDao;
@@ -19,6 +21,8 @@ import com.weather.WeatherApi.dao.CountryRepo;
 import com.weather.WeatherApi.dao.WeatherDataRepo;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
 import com.weather.WeatherApi.exceptions.DefaultException;
+import com.weather.WeatherApi.util.Calculation;
+import com.weather.WeatherApi.util.GlobalExceptionHandler;
 import com.weather.WeatherApi.util.SuccessRespose;
 
 import kong.unirest.HttpResponse;
@@ -69,7 +73,7 @@ public class WeatherServiceImpl implements IWeatherService{
 	}
 
 	@Override
-	public City setCity(City city) {
+	public City setCity(City city) throws DataIntegrityViolationException {
 		Country tempCountry = countryDao.getCountryByName(city.getCountry().getCountry());
 		city.setCountry(tempCountry);
 		
@@ -83,10 +87,12 @@ public class WeatherServiceImpl implements IWeatherService{
 			city.setLongitude(longitude);
 		}
 		else {
-			city.setLatitude(Math.random());
-			city.setLongitude(Math.random());
+			Random rd = new Random();
+			Double latRandom = rd.nextDouble();
+			Double lonRandom = rd.nextDouble();
+			city.setLatitude(Calculation.round(latRandom, 2));
+			city.setLongitude(Calculation.round(lonRandom, 2));
 		}
-		
 		return cityDao.save(city);
 	}
 
@@ -157,6 +163,12 @@ public class WeatherServiceImpl implements IWeatherService{
 			throw new DefaultException("Internal server error");
 		}
 		return "Weather deleted";
+	}
+
+	@Override
+	public WeatherData updateTemperature(String city, Date date, Double temperature) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

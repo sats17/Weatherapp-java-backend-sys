@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,7 +69,17 @@ public class RestApiController {
 	 */
 	@PostMapping(value = "/setCity")
 	public City setCountry(@RequestBody final City city) {
-		return weatherService.setCity(city);
+		City cityObj = null;
+		try {
+			cityObj = weatherService.setCity(city);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DefaultException("City is already present");
+		}
+		catch(Exception e) {
+			throw new DefaultException("Internal server error");
+		}
+		return cityObj;
 	}
 	
 	

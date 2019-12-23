@@ -14,10 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.weather.WeatherApi.util.WeatherCalculation;
+import com.weather.WeatherApi.util.Calculation;
 
 /**
  * @author sats17
@@ -102,7 +103,7 @@ public class WeatherData {
 	 * @param humidity the humidity to set
 	 */
 	public void setHumidity() {
-		this.humidity = WeatherCalculation.calculateRelativeHumidity(this.temperature,this.dew);
+		this.humidity = Calculation.calculateRelativeHumidity(this.temperature,this.dew);
 	}
 
 	/**

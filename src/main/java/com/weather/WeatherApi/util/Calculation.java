@@ -1,6 +1,6 @@
 package com.weather.WeatherApi.util;
 
-public class WeatherCalculation {
+public class Calculation {
 
 	
 	public static Double calculateSaturateVaporPressure(Double temp) {
@@ -18,5 +18,14 @@ public class WeatherCalculation {
 		
 		return (calculateActualVaporPressure(dew) / calculateSaturateVaporPressure(temp)) * 100;
 		
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
 	}
 }
