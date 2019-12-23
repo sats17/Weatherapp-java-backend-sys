@@ -14,7 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 @Entity

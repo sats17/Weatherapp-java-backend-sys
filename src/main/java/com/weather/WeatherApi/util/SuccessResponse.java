@@ -2,7 +2,7 @@ package com.weather.WeatherApi.util;
 
 import java.sql.Date;
 
-public class SuccessRespose {
+public class SuccessResponse {
 	
 	private String city;
 	private Double humidity;
@@ -45,13 +45,13 @@ public class SuccessRespose {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public SuccessRespose(String city, Double humidity,Date date) {
+	public SuccessResponse(String city, Double humidity,Date date) {
 		super();
 		this.city = city;
 		this.humidity = humidity;
 		this.date = date;
 	}
 	
-	public SuccessRespose() {}
+	public SuccessResponse() {}
 	
 }

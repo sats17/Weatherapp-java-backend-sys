@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.weather.WeatherApi.beans.WeatherData;
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 @Repository
@@ -51,8 +51,4 @@ public interface WeatherDataRepo extends JpaRepository<WeatherData, Integer>{
 	@Query(value = "UPDATE WeatherData w SET w.temperature = :temp WHERE w.date = :date")
 	void updateTemperature(Double temp,Date date);
 	
-	@Transactional
-	@Modifying
-	@Query(value = "DELETE FROM WeatherData w WHERE w.date = :date")
-	void deleteWeather(Date date);
 }

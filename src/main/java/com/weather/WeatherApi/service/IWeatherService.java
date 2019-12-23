@@ -10,16 +10,16 @@ import com.weather.WeatherApi.beans.City;
 import com.weather.WeatherApi.beans.Country;
 import com.weather.WeatherApi.beans.WeatherData;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
-import com.weather.WeatherApi.util.SuccessRespose;
+import com.weather.WeatherApi.util.SuccessResponse;
 
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 public interface IWeatherService {
 	
-	SuccessRespose getLiveHumidity(String city) throws CityNotFoundException;
+	SuccessResponse getLiveHumidity(String city) throws CityNotFoundException;
 	
 	Country setCountry(Country country);
 	
@@ -29,9 +29,9 @@ public interface IWeatherService {
 	
 	List<WeatherData> getWeatherByCity(String city);
 	
-	List<SuccessRespose> getHumidityByCity(String city);
+	List<SuccessResponse> getHumidityByCity(String city);
 	
-	SuccessRespose getHumidity(String city,Date date);
+	SuccessResponse getHumidity(String city,Date date);
 	
 	String deleteCity(String city);
 	

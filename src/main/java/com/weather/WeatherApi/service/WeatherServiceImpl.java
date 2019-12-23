@@ -23,7 +23,7 @@ import com.weather.WeatherApi.exceptions.CityNotFoundException;
 import com.weather.WeatherApi.exceptions.DefaultException;
 import com.weather.WeatherApi.util.Calculation;
 import com.weather.WeatherApi.util.GlobalExceptionHandler;
-import com.weather.WeatherApi.util.SuccessRespose;
+import com.weather.WeatherApi.util.SuccessResponse;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -49,14 +49,14 @@ public class WeatherServiceImpl implements IWeatherService{
 	private CityRepo cityDao;
 	
 	@Override
-	public SuccessRespose getLiveHumidity(String city) throws CityNotFoundException {
+	public SuccessResponse getLiveHumidity(String city) throws CityNotFoundException {
 		HttpResponse<JsonNode> httpResponse = weatherDao.getWeather(city);
 		
 		if(httpResponse.getStatus() == 200) {
 			JsonNode body = httpResponse.getBody();
 			Double humidity = ((double)(int) body.getObject().getJSONObject("main").get("humidity"));
 			Date time=new Date(body.getObject().getLong("dt")*1000);
-			SuccessRespose response = new SuccessRespose(city, humidity,time);
+			SuccessResponse response = new SuccessResponse(city, humidity,time);
 			return response;
 		}
 		else if(httpResponse.getStatus() == 404){
@@ -114,25 +114,25 @@ public class WeatherServiceImpl implements IWeatherService{
 	}
 
 	@Override
-	public SuccessRespose getHumidity(String city, Date date) {
+	public SuccessResponse getHumidity(String city, Date date) {
 		Double humidity = weatherDataDao.getHumidityByCityAndDate(city, date);
 		if(humidity == null) {
 			throw new DefaultException("Humidity not available for given date or city.");
 		}
-		SuccessRespose response = new SuccessRespose(city,humidity,date);
+		SuccessResponse response = new SuccessResponse(city,humidity,date);
 		return response;
 	}
 
 	@Override
-	public List<SuccessRespose> getHumidityByCity(String city) {
+	public List<SuccessResponse> getHumidityByCity(String city) {
 		// TODO Auto-generated method stub
 		List<Object[]> datas =  weatherDataDao.getHumidityByCity(city);
 		if(datas.size() == 0) {
 			throw new CityNotFoundException("Cannot fetch humidity for given city.");
 		}
-		List<SuccessRespose> response = new ArrayList<SuccessRespose>();
+		List<SuccessResponse> response = new ArrayList<SuccessResponse>();
 		for(Object[] data: datas){
-	         SuccessRespose obj = new SuccessRespose(city, (Double) data[1],(Date)data[0]);
+	         SuccessResponse obj = new SuccessResponse(city, (Double) data[1],(Date)data[0]);
 	         response.add(obj);
 	     }
 		return response;
