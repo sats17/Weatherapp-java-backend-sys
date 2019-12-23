@@ -31,8 +31,6 @@ public class WeatherDaoImpl implements IWeatherDao{
                 .queryString("q",city)
                 .header("content-type","application/json")
                 .asJson();
-		System.out.println(response.getBody());
-		System.out.println(response.getStatus());
 		return response;
 	}
 	

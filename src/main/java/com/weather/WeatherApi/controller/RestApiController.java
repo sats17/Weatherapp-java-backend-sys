@@ -1,11 +1,9 @@
 package com.weather.WeatherApi.controller;
 
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,7 +25,8 @@ import com.weather.WeatherApi.beans.Country;
 import com.weather.WeatherApi.beans.WeatherData;
 import com.weather.WeatherApi.exceptions.DefaultException;
 import com.weather.WeatherApi.service.IWeatherService;
-import com.weather.WeatherApi.util.SuccessResponse;
+import com.weather.WeatherApi.util.HumidityResponse;
+import com.weather.WeatherApi.util.Util;
 
 
 
@@ -49,9 +48,9 @@ public class RestApiController {
 	 * @apiNote Use to get live humidity for given city.
 	 */
 	@GetMapping(value = "/live/humidity")
-	public ResponseEntity<SuccessResponse> getLiveHumidityByCity(@RequestParam ("city") String city) {
-		SuccessResponse response = weatherService.getLiveHumidity(city);
-		return new ResponseEntity<SuccessResponse>(response, HttpStatus.OK);
+	public ResponseEntity<HumidityResponse> getLiveHumidityByCity(@RequestParam ("city") String city) {
+		HumidityResponse response = weatherService.getLiveHumidity(city);
+		return new ResponseEntity<HumidityResponse>(response, HttpStatus.OK);
 		
 	}
 	
@@ -93,8 +92,8 @@ public class RestApiController {
 	 * @return String
 	 */
 	@DeleteMapping(value = "/city")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public String deleteCity(@RequestParam(name = "city",required = true) String city) {
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String, String> deleteCity(@RequestParam(name = "city",required = true) String city) {
 		return weatherService.deleteCity(city);	
 	}
 	
@@ -127,18 +126,10 @@ public class RestApiController {
 	 * @return
 	 */
 	@DeleteMapping(value = "/weather")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public String deleteWeather(@RequestParam(name = "city",required = true) String city,@RequestParam(name = "date",required = true) String date) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		java.util.Date parsedDate = null;
-		Date sqlDate = null;
-		try {
-			parsedDate = dateFormat.parse(date);
-		    sqlDate = new Date(parsedDate.getTime());
-		} catch (ParseException e) {
-			throw new DefaultException("Please enter proper date format");
-		}
-		return weatherService.deleteWeather(city, sqlDate);	
+	@ResponseStatus(HttpStatus.OK)
+	public HashMap<String, String> deleteWeather(@RequestParam(name = "city",required = true) String city,
+			@RequestParam(name = "date",required = true) String date) {
+		return weatherService.deleteWeather(city, Util.DateParser(date));	
 	}
 	
 	/**
@@ -147,19 +138,10 @@ public class RestApiController {
 	 * @return
 	 */
 	@PatchMapping(value = "/weather")
+	@ResponseStatus(HttpStatus.OK)
 	public WeatherData updateWeather(@RequestParam(name = "city",required = true) String city,@RequestParam(name = "date",required = true) String date,
 			@RequestParam(name = "temperature",required = true) Double temperature){
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			java.util.Date parsedDate = null;
-			Date sqlDate = null;
-			try {
-				parsedDate = dateFormat.parse(date);
-				sqlDate = new Date(parsedDate.getTime());
-			} catch (ParseException e) {
-				throw new DefaultException("Please enter proper date format");
-			}
-				
-		return weatherService.updateTemperature(city, sqlDate, temperature);
+		return weatherService.updateTemperature(city, Util.DateParser(date), temperature);
 	}
 	
 	/**
@@ -168,7 +150,7 @@ public class RestApiController {
 	 * @apiNote Use to get all days humidity for given city.
 	 */
 	@GetMapping(value = "/weather/humidity")
-	public List<SuccessResponse> getHumidityByCity(@RequestParam(name = "city",required = true) String city){
+	public List<HumidityResponse> getHumidityByCity(@RequestParam(name = "city",required = true) String city){
 		return weatherService.getHumidityByCity(city);
 		
 	}
@@ -180,23 +162,12 @@ public class RestApiController {
 	 * @apiNote Use to get humidity by date and city
 	 */
 	@GetMapping(value = "/weather/humidity/{city}")
-	public ResponseEntity<SuccessResponse> getHumidityByCityAndDate(@PathVariable String city,
+	public ResponseEntity<HumidityResponse> getHumidityByCityAndDate(@PathVariable String city,
 			@RequestParam(name = "date" , required = true) String date) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			java.util.Date parsedDate = null;
-			Date sqlDate = null;
-			try {
-				parsedDate = dateFormat.parse(date);
-			    sqlDate = new Date(parsedDate.getTime());
-			} catch (ParseException e) {
-				throw new DefaultException("Please enter proper date format");
-			}
-			SuccessResponse response = weatherService.getHumidity(city,sqlDate);
-			return new ResponseEntity<SuccessResponse>(response, HttpStatus.OK);
+			HumidityResponse response = weatherService.getHumidity(city,Util.DateParser(date));
+			return new ResponseEntity<HumidityResponse>(response, HttpStatus.OK);
 		
 	}
-
-	
 }	
 
 	

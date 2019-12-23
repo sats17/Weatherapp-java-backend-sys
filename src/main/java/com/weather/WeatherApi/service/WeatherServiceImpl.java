@@ -21,12 +21,14 @@ import com.weather.WeatherApi.dao.CountryRepo;
 import com.weather.WeatherApi.dao.WeatherDataRepo;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
 import com.weather.WeatherApi.exceptions.DefaultException;
+import com.weather.WeatherApi.exceptions.WeatherNotFoundException;
 import com.weather.WeatherApi.util.Calculation;
 import com.weather.WeatherApi.util.GlobalExceptionHandler;
-import com.weather.WeatherApi.util.SuccessResponse;
+import com.weather.WeatherApi.util.HumidityResponse;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
+import kong.unirest.json.JSONObject;
 
 
 /**
@@ -49,14 +51,14 @@ public class WeatherServiceImpl implements IWeatherService{
 	private CityRepo cityDao;
 	
 	@Override
-	public SuccessResponse getLiveHumidity(String city) throws CityNotFoundException {
+	public HumidityResponse getLiveHumidity(String city) throws CityNotFoundException {
 		HttpResponse<JsonNode> httpResponse = weatherDao.getWeather(city);
 		
 		if(httpResponse.getStatus() == 200) {
 			JsonNode body = httpResponse.getBody();
 			Double humidity = ((double)(int) body.getObject().getJSONObject("main").get("humidity"));
 			Date time=new Date(body.getObject().getLong("dt")*1000);
-			SuccessResponse response = new SuccessResponse(city, humidity,time);
+			HumidityResponse response = new HumidityResponse(city, humidity,time);
 			return response;
 		}
 		else if(httpResponse.getStatus() == 404){
@@ -114,32 +116,32 @@ public class WeatherServiceImpl implements IWeatherService{
 	}
 
 	@Override
-	public SuccessResponse getHumidity(String city, Date date) {
+	public HumidityResponse getHumidity(String city, Date date) {
 		Double humidity = weatherDataDao.getHumidityByCityAndDate(city, date);
 		if(humidity == null) {
 			throw new DefaultException("Humidity not available for given date or city.");
 		}
-		SuccessResponse response = new SuccessResponse(city,humidity,date);
+		HumidityResponse response = new HumidityResponse(city,humidity,date);
 		return response;
 	}
 
 	@Override
-	public List<SuccessResponse> getHumidityByCity(String city) {
+	public List<HumidityResponse> getHumidityByCity(String city) {
 		// TODO Auto-generated method stub
 		List<Object[]> datas =  weatherDataDao.getHumidityByCity(city);
 		if(datas.size() == 0) {
 			throw new CityNotFoundException("Cannot fetch humidity for given city.");
 		}
-		List<SuccessResponse> response = new ArrayList<SuccessResponse>();
+		List<HumidityResponse> response = new ArrayList<HumidityResponse>();
 		for(Object[] data: datas){
-	         SuccessResponse obj = new SuccessResponse(city, (Double) data[1],(Date)data[0]);
+	         HumidityResponse obj = new HumidityResponse(city, (Double) data[1],(Date)data[0]);
 	         response.add(obj);
 	     }
 		return response;
 	}
 
 	@Override
-	public String deleteCity(String city) {
+	public Map<String,String> deleteCity(String city) {
 		City cityObj = cityDao.getCityByName(city);
 		if(cityObj == null) {
 			throw new CityNotFoundException("Given city is not found");
@@ -150,11 +152,13 @@ public class WeatherServiceImpl implements IWeatherService{
 		catch(Exception e) {
 			throw new DefaultException("Internal server error.");
 		}
-		return "City Deleted";
+		HashMap<String, String> result = new HashMap<String, String>();
+		result.put("Result", "City deleted");
+		return result;
 	}
 
 	@Override
-	public String deleteWeather(String city, Date date) {
+	public HashMap<String, String> deleteWeather(String city, Date date) {
 		try {
 			WeatherData weatherObj = weatherDataDao.getWeather(city, date);
 			weatherDataDao.delete(weatherObj);
@@ -162,12 +166,17 @@ public class WeatherServiceImpl implements IWeatherService{
 		catch(Exception e) {
 			throw new DefaultException("Internal server error");
 		}
-		return "Weather deleted";
+		HashMap<String, String> result = new HashMap<String, String>();
+		result.put("Result", "Weather deleted");
+		return result;
 	}
 
 	@Override
-	public WeatherData updateTemperature(String city, Date date, Double temperature) {
+	public WeatherData updateTemperature(String city, Date date, Double temperature) throws WeatherNotFoundException {
 		WeatherData weatherObj = weatherDataDao.getWeather(city, date);
+		if(weatherObj == null) {
+			throw new WeatherNotFoundException("Weather not found for given data.");
+		}
 		weatherObj.setTemperature(temperature);
 		weatherObj.setHumidity();
 		return weatherDataDao.save(weatherObj);
