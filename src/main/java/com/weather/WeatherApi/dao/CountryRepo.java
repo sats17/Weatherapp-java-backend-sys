@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.weather.WeatherApi.beans.Country;
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 public interface CountryRepo extends JpaRepository<Country, Integer>{

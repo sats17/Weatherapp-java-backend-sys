@@ -21,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.weather.WeatherApi.util.Calculation;
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 @Entity
