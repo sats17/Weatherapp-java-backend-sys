@@ -103,7 +103,7 @@ public class WeatherData {
 	 * @param humidity the humidity to set
 	 */
 	public void setHumidity() {
-		this.humidity = Calculation.calculateRelativeHumidity(this.temperature,this.dew);
+		this.humidity = Calculation.round(Calculation.calculateRelativeHumidity(this.temperature,this.dew), 2);
 	}
 
 	/**

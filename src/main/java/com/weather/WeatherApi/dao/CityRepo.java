@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.weather.WeatherApi.beans.City;
 
 /**
- * @author sats17
+ * @author sats17,ashu1521,abhimanyu
  *
  */
 public interface CityRepo extends JpaRepository<City, Integer>{

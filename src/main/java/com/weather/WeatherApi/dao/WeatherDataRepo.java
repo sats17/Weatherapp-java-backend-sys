@@ -45,7 +45,12 @@ public interface WeatherDataRepo extends JpaRepository<WeatherData, Integer>{
 	 */
 	@Query(value = "SELECT w.humidity FROM WeatherData w WHERE w.city.city = :city AND w.date = :date")
 	Double getHumidityByCityAndDate(String city,Date date);
-
+	
+	@Transactional
+	@Modifying
+	@Query(value = "UPDATE WeatherData w SET w.temperature = :temp WHERE w.date = :date")
+	void updateTemperature(Double temp,Date date);
+	
 	@Transactional
 	@Modifying
 	@Query(value = "DELETE FROM WeatherData w WHERE w.date = :date")

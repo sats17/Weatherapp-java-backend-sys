@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -148,6 +149,11 @@ public class RestApiController {
 		return weatherService.deleteCity(city);	
 	}
 	
+	/**
+	 * @param city
+	 * @param date
+	 * @return
+	 */
 	@DeleteMapping(value = "/deleteWeather")
 	public String deleteWeather(@RequestParam("city") String city,@RequestParam("date") String date) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -161,7 +167,29 @@ public class RestApiController {
 		}
 		return weatherService.deleteWeather(city, sqlDate);	
 	}
+	
+	/**
+	 * @param city
+	 * @param date
+	 * @return
+	 */
+	@PatchMapping(value = "/updateWeather")
+	public WeatherData updateWeather(@RequestParam("city") String city,@RequestParam("date") String date,
+			@RequestParam("temperature") Double temperature){
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date parsedDate = null;
+			Date sqlDate = null;
+			try {
+				parsedDate = dateFormat.parse(date);
+				sqlDate = new Date(parsedDate.getTime());
+			} catch (ParseException e) {
+				throw new DefaultException("Please enter proper date format");
+			}
+				
+		return weatherService.updateTemperature(city, sqlDate, temperature);
+		}
 
 	
 }	
+
 	

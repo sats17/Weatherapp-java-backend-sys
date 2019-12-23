@@ -167,8 +167,10 @@ public class WeatherServiceImpl implements IWeatherService{
 
 	@Override
 	public WeatherData updateTemperature(String city, Date date, Double temperature) {
-		// TODO Auto-generated method stub
-		return null;
+		WeatherData weatherObj = weatherDataDao.getWeather(city, date);
+		weatherObj.setTemperature(temperature);
+		weatherObj.setHumidity();
+		return weatherDataDao.save(weatherObj);
 	}
 
 }
