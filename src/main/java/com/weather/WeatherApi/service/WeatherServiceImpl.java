@@ -99,7 +99,11 @@ public class WeatherServiceImpl implements IWeatherService{
 	}
 
 	@Override
-	public WeatherData setWeatherData(WeatherData weather) {
+	public WeatherData setWeatherData(WeatherData weather) throws DataIntegrityViolationException{
+		
+		if(cityDao.getCityByName(weather.getCity().getCity()) == null) {
+			throw new CityNotFoundException("Cannot add weather for given city.");
+		}
 		City tempCity = cityDao.getCityByName(weather.getCity().getCity());
 		weather.setCity(tempCity);
 		weather.setHumidity();
@@ -159,8 +163,12 @@ public class WeatherServiceImpl implements IWeatherService{
 
 	@Override
 	public HashMap<String, String> deleteWeather(String city, Date date) {
+		WeatherData weatherObj = weatherDataDao.getWeather(city, date);
+		if(weatherObj == null) {
+			throw new WeatherNotFoundException("Weather not found for given city and date.");
+		}
 		try {
-			WeatherData weatherObj = weatherDataDao.getWeather(city, date);
+			
 			weatherDataDao.delete(weatherObj);
 		}
 		catch(Exception e) {

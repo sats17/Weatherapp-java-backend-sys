@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import com.weather.WeatherApi.exceptions.CityNotFoundException;
 import com.weather.WeatherApi.exceptions.DefaultException;
+import com.weather.WeatherApi.exceptions.WeatherNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -19,9 +20,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
 
-				req.getDescription(false), HttpStatus.NOT_ACCEPTABLE.getReasonPhrase());
+				req.getDescription(false), HttpStatus.NOT_FOUND.getReasonPhrase());
 
-		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
+
+	}
+	
+	@ExceptionHandler(WeatherNotFoundException.class)
+	public static final ResponseEntity<ExceptionResponse> handleWeatherNotFoundException(WeatherNotFoundException ex, WebRequest req) {
+
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+
+				req.getDescription(false), HttpStatus.NOT_FOUND.getReasonPhrase());
+
+		return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
 
 	}
 	

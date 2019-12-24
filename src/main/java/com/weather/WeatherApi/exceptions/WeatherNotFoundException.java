@@ -2,6 +2,11 @@ package com.weather.WeatherApi.exceptions;
 
 public class WeatherNotFoundException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public WeatherNotFoundException() {
 		// TODO Auto-generated constructor stub
 	}

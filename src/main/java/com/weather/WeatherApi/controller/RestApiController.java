@@ -60,7 +60,7 @@ public class RestApiController {
 	 * @return Country
 	 * @apiNote Use to set country.
 	 */
-	@PostMapping(value = "/set")
+	@PostMapping(value = "/country")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Country setCountry(@RequestBody final Country country) {
 		return weatherService.setCountry(country);
@@ -106,7 +106,15 @@ public class RestApiController {
 	@PostMapping(value = "/weather")
 	@ResponseStatus(HttpStatus.CREATED)
 	public WeatherData setWeather(@RequestBody(required = true) final WeatherData weather) {
-		return weatherService.setWeatherData(weather);
+		WeatherData obj = null;
+		try{
+			obj = weatherService.setWeatherData(weather);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DefaultException("Data already present");
+		}
+		return obj;
+		
 	}
 	
 	/**
