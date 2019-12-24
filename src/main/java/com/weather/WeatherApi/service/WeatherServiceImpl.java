@@ -172,7 +172,7 @@ public class WeatherServiceImpl implements IWeatherService{
 			weatherDataDao.delete(weatherObj);
 		}
 		catch(Exception e) {
-			throw new DefaultException("Internal server error");
+			throw new DefaultException("Internal server error : "+e.getMessage());
 		}
 		HashMap<String, String> result = new HashMap<String, String>();
 		result.put("Result", "Weather deleted");

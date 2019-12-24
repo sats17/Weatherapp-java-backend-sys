@@ -151,12 +151,4 @@ public class City {
 		return "City [cityId=" + cityId + ", city=" + city + ", country=" + country + ", latitude=" + latitude
 				+ ", longitude=" + longitude + "]";
 	}
-
-	
-	
-	
-	
-	
-	
-	
 }
