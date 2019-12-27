@@ -123,7 +123,7 @@ public class WeatherServiceImpl implements IWeatherService{
 	public HumidityResponse getHumidity(String city, Date date) {
 		Double humidity = weatherDataDao.getHumidityByCityAndDate(city, date);
 		if(humidity == null) {
-			throw new DefaultException("Humidity not available for given date or city.");
+			throw new CityNotFoundException("Humidity not available for given date or city.");
 		}
 		HumidityResponse response = new HumidityResponse(city,humidity,date);
 		return response;
